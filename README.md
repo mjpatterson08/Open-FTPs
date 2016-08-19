@@ -1,5 +1,5 @@
 # Open-FTPs
-Powershell implementation that allows FTPS using Implicit SSL/TLS file transfers with no dependencies.
+Powershell implementation that allows FTPS file transfers using Implicit SSL/TLS with no dependencies.
 
 Underlying helper functions allow for FTP to be executing over a clear text connection or one using Implicit or Explicit SSL/TLS.
 

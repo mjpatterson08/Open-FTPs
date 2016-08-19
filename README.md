@@ -28,6 +28,7 @@ Handle Control Connection
 -Send the STOR Command to let the Server know that file data will be comming and where to store it.
 
 Handle Data Connection
+
 -Establish a TCP Connection to the data port using the Server's IP Address and Data Port number we parsed from the Passive Command earlier.
 
 -Authenticate SSL/TLS handshake and upgrade to an SSL Stream.

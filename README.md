@@ -13,31 +13,21 @@ In an Implicit SSL/TLS setup the port used for the control connection is typical
 
 Handle Control Connection
 
--Establish a TCP Connection to the control port using the Server's IP Address and Control Port number.
-
--Authenticate SSL/TLS handshake and upgrade to an SSL Stream.
-
--Create a delegate that can write valid FTP Commands to the SSL Stream.
-
--Send User and Pass commands along with the appropriate UserName and Password to authenticate with the FTP server.
-
--Send the commands related to the File transfer, these include STRU, PROT, TYPE, and MODE to name a few, these tell the server the type of stream to be used the file structure (Binary vs ASCII) etc.
-
--Send the Passive Command to tell the server it needs to send you back a port number that you can use to setup the Data Connection, and parse the Server's response.
-
--Send the STOR Command to let the Server know that file data will be comming and where to store it.
+  1.Establish a TCP Connection to the control port using the Server's IP Address and Control Port number.
+  2.Authenticate SSL/TLS handshake and upgrade to an SSL Stream.
+  3.Create a delegate that can write valid FTP Commands to the SSL Stream.
+  4.Send User and Pass commands along with the appropriate UserName and Password to authenticate with the FTP server.
+  5.Send the commands related to the File transfer, these include STRU, PROT, TYPE, and MODE to name a few, these tell the server the    type of stream to be used the file structure (Binary vs ASCII) etc.
+  6.Send the Passive Command to tell the server it needs to send you back a port number that you can use to setup the Data Connection,   and parse the Server's response.
+  7.Send the STOR Command to let the Server know that file data will be comming and where to store it.
 
 Handle Data Connection
 
--Establish a TCP Connection to the data port using the Server's IP Address and Data Port number we parsed from the Passive Command earlier.
-
--Authenticate SSL/TLS handshake and upgrade to an SSL Stream.
-
--Write the bytes of the local file to the SSL Stream.
-
--Close the Data Connection when finished the Server knows what to do with the data based on the commands already sent using the control connection.
-
-Then finally close the Control Connection.
+  1.Establish a TCP Connection to the data port using the Server's IP Address and Data Port number we parsed from the Passive Command e   earlier.
+  2.Authenticate SSL/TLS handshake and upgrade to an SSL Stream.
+  3.Write the bytes of the local file to the SSL Stream.
+  4.Close the Data Connection when finished the Server knows what to do with the data based on the commands already sent using the c     control connection.
+  5.Then finally close the Control Connection.
 
 All this is made simple with the below example of a file transfer using this module.
 

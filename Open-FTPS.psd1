@@ -12,7 +12,7 @@
 RootModule = 'Open-FTPS.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.0.2'
 
 # ID used to uniquely identify this module
 GUID = 'f18b11a4-a4b4-41b8-baec-b445984d1050'

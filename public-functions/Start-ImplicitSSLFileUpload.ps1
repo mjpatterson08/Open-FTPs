@@ -85,44 +85,51 @@ Function Start-ImplicitSSLFileUpload
           [Switch]$SelfSigned)
 
     Write-Verbose "BEGIN Control Connection Verbose Stream--------------"
-    $TCPControlSocket = New-TCPClientSocket -ServerIPAddress $ServerIPAddress -ServerPortNumber $ControlPortNumber -Verbose
+    $TCPControlSocket = New-TCPClientSocket -ServerIPAddress $ServerIPAddress -ServerPortNumber $ControlPortNumber
+
+    $FTPServerParams = @{
+        ServerIPAddress = $ServerIPAddress
+        TCPClientSocket = $TCPControlSocket
+    }
     if ($SelfSigned)
     {
-        $FTPServerControlConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPControlSocket -TransmissionContext SSLSelfSigned -Verbose
+        $FTPServerParams.TransmissionContext = SSLSelfSigned
     }
     else
     {
-        $FTPServerControlConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPControlSocket -TransmissionContext StandardSSL -Verbose
+         $FTPServerParams.TransmissionContext = StandardSSL
     }
+
+    $FTPServerControlConnection = Connect-FTPServer @FTPServerParams
 
     $ControlConnectionCommandWriter = New-FTPCommandDelegate -FTPServerConnection $FTPServerControlConnection
 
-    Send-FTPAuthCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -UserName $UserName -Password $Password | Out-Null 
-    Send-FTPTransferSetUpCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection | Out-Null
-    $PassiveHandshakePortResponse   = Send-FTPPassiveCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection
-    Send-FTPFileTransferCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -LocalFilePath $LocalFilePath -RemoteFilePathRoot $RemoteDirectory | Out-Null
+    $controlConnection = @{
+        CommandWriter = $ControlConnectionCommandWriter
+        FTPServerConnection = $FTPServerControlConnection
+    }
+    Send-FTPAuthCommand -UserName $UserName -Password $Password @controlConnection | Out-Null 
+    Send-FTPTransferSetUpCommand @controlConnection| Out-Null
+    $PassiveHandshakePortResponse = Send-FTPPassiveCommand @controlConnection
+    Send-FTPFileTransferCommand -LocalFilePath $LocalFilePath -RemoteFilePathRoot $RemoteDirectory @controlConnection | Out-Null
     Write-Verbose "END Control Connection Verbose Stream---------------"
 
     Write-Verbose "BEGIN Data Connection Verbose Stream---------------"
-    $TCPDataSocket = New-TCPClientSocket -ServerIPAddress $ServerIPAddress -ServerPortNumber $PassiveHandshakePortResponse -Verbose
-    if ($SelfSigned)
-    {
-        $FTPServerDataConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPDataSocket -TransmissionContext SSLSelfSigned -Verbose
-    }
-    else
-    {
-        $FTPServerDataConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPDataSocket -TransmissionContext StandardSSL -Verbose
-    }
+    $TCPDataSocket = New-TCPClientSocket -ServerIPAddress $ServerIPAddress -ServerPortNumber $PassiveHandshakePortResponse
 
-    Send-LocalFileByte -FTPServerConnection $FTPServerDataConnection -LocalFilePath $LocalFilePath -Verbose
-    Close-TCPNetworkStream -FTPServerConnection $FTPServerDataConnection -ConnectionType DataConnection -Verbose
-    Close-TCPClientSocket -TCPClientSocket $TCPDataSocket -SocketType DataSocket -Verbose
+    # reuse FTPServerParams from above and just change the socket
+    $FTPServerParams.TCPClientSocket = $TCPDataSocket
+    $FTPServerDataConnection = Connect-FTPServer @FTPServerParams
+
+    Send-LocalFileByte -FTPServerConnection $FTPServerDataConnection -LocalFilePath $LocalFilePath
+    Close-TCPNetworkStream -FTPServerConnection $FTPServerDataConnection -ConnectionType DataConnection
+    Close-TCPClientSocket -TCPClientSocket $TCPDataSocket -SocketType DataSocket
     Write-Verbose "END Data Connection Verbose Stream---------------"
     
     Write-Verbose "BEGIN Control Connection Clean Up Verbose Stream---------------"
-    Close-FTPCommandDelegate -CommandWritingDelegate $ControlConnectionCommandWriter -Verbose
-    Close-TCPNetworkStream -FTPServerConnection $FTPServerControlConnection -ConnectionType ControlConnection -Verbose
-    Close-TCPClientSocket -TCPClientSocket $TCPControlSocket -SocketType ControlSocket -Verbose
+    Close-FTPCommandDelegate -CommandWritingDelegate $ControlConnectionCommandWriter
+    Close-TCPNetworkStream -FTPServerConnection $FTPServerControlConnection -ConnectionType ControlConnection
+    Close-TCPClientSocket -TCPClientSocket $TCPControlSocket -SocketType ControlSocket
     Write-Verbose "End Control Connection Clean Up Verbose Stream---------------"
     Write-Output $FTPServerTranscript
 }

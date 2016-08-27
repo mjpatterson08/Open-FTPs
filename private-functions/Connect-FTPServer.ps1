@@ -53,8 +53,8 @@ Function Connect-FTPServer
           [ValidateSet("ClearText", "StandardSSL", "SSLSelfSigned")]
           [String]$TransmissionContext)
     
-    $FTPServerConnection = Open-TCPNetworkStream -TCPClientSocket $TCPClientSocket -ServerIPAddress $ServerIPAddress -TransmissionContext $TransmissionContext -Verbose
-    $TestStreamSecurity  = Test-ConnectionEncryption -FTPServerConnection $FTPServerConnection -Verbose
+    $FTPServerConnection = Open-TCPNetworkStream -TCPClientSocket $TCPClientSocket -ServerIPAddress $ServerIPAddress -TransmissionContext $TransmissionContext
+    $TestStreamSecurity  = Test-ConnectionEncryption -FTPServerConnection $FTPServerConnection
 
     if ($TestStreamSecurity)
     {

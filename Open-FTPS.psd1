@@ -22,7 +22,7 @@ Author = 'Michael J. Patterson'
 <#
 Other Contributers
 Kevn Marquette
->#
+#>
 
 # Company or vendor of this module
 CompanyName = 'Unknown'
@@ -73,13 +73,13 @@ Copyright = '(c) 2016 Michael J. Patterson. All rights reserved.'
 FunctionsToExport = 'Start-ImplicitSSLFileUpload'
 
 # Cmdlets to export from this module
-CmdletsToExport = '*'
+CmdletsToExport = ''
 
 # Variables to export from this module
 VariablesToExport = 'FTPServerTranscript'
 
 # Aliases to export from this module
-AliasesToExport = '*'
+AliasesToExport = ''
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()

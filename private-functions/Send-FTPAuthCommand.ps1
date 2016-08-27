@@ -30,21 +30,29 @@ Function Send-FTPAuthCommand
     Author: Michael J. Patterson
 #>
     [CmdletBinding()]
-    Param([Parameter(Mandatory = $True, Position = 0)]
-          [ValidateNotNullorEmpty()]
-          $CommandWriter,
+    Param
+    (
+        [Parameter(Mandatory = $True, Position = 0)]
+        [ValidateNotNullorEmpty()]
+        $CommandWriter,
 
-          [Parameter(Mandatory = $True, Position = 1)]
-          [ValidateNotNullorEmpty()]
-          $FTPServerConnection,
-          
-          [Parameter(Mandatory = $False, Position = 2)]
-          [ValidateNotNullorEmpty()]
-          [String]$UserName,
-          
-          [Parameter(Mandatory = $False, Position = 3)]
-          [ValidateNotNullorEmpty()]
-          [String]$Password)
+        [Parameter(Mandatory = $True, Position = 1)]
+        [ValidateNotNullorEmpty()]
+        $FTPServerConnection,
+        
+        [Parameter(Mandatory = $False, Position = 2)]
+        [ValidateNotNullorEmpty()]
+        [String]$UserName,
+        
+        [Parameter(Mandatory = $False, Position = 3)]
+        [ValidateNotNullorEmpty()]
+        [String]$Password
+    )
 
-    Write-FTPCommand -FTPCommand @("USER $UserName","PASS $Password") -CommandWriter $CommandWriter -FTPServerConnection $FTPServerConnection -Verbose
+    $FTPcommand = @{
+        FTPCommand          = @("USER $UserName","PASS $Password") 
+        CommandWriter       = $CommandWriter
+        FTPServerConnection = $FTPServerConnection
+    }
+    Write-FTPCommand @FTPcommand
 }

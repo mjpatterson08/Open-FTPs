@@ -37,6 +37,6 @@ Function Send-LocalFileByte
     $LocalFileBytes = Get-Content -Path $LocalFilePath -Encoding Byte
     $LocalFileLength = $LocalFileBytes.Length
     Write-Verbose "Sending bytes from local file"
-    $FTPServerConnection.Write($LocalFileBytes, 0, $LocalFileLength)
+    [void]$FTPServerConnection.Write($LocalFileBytes, 0, $LocalFileLength)
     Write-Verbose "Local file bytes transferred"
 }

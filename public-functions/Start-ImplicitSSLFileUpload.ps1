@@ -94,11 +94,13 @@ Function Start-ImplicitSSLFileUpload
     {
         $FTPServerControlConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPControlSocket -TransmissionContext StandardSSL -Verbose
     }
+
     $ControlConnectionCommandWriter = New-FTPCommandDelegate -FTPServerConnection $FTPServerControlConnection
-    $SendAuthenicationCommands      = Send-FTPAuthCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -UserName $UserName -Password $Password
-    $SendSetupTransferModes         = Send-FTPTransferSetUpCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection
+
+    Send-FTPAuthCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -UserName $UserName -Password $Password | Out-Null 
+    Send-FTPTransferSetUpCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection | Out-Null
     $PassiveHandshakePortResponse   = Send-FTPPassiveCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection
-    $SendSTORFileCommand            = Send-FTPFileTransferCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -LocalFilePath $LocalFilePath -RemoteFilePathRoot $RemoteDirectory
+    Send-FTPFileTransferCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -LocalFilePath $LocalFilePath -RemoteFilePathRoot $RemoteDirectory | Out-Null
     Write-Verbose "END Control Connection Verbose Stream---------------"
 
     Write-Verbose "BEGIN Data Connection Verbose Stream---------------"
@@ -111,15 +113,16 @@ Function Start-ImplicitSSLFileUpload
     {
         $FTPServerDataConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPDataSocket -TransmissionContext StandardSSL -Verbose
     }
-    $SendLocalFileBytes          = Send-LocalFileByte -FTPServerConnection $FTPServerDataConnection -LocalFilePath $LocalFilePath -Verbose
-    $CleanUpServerDataConnection = Close-TCPNetworkStream -FTPServerConnection $FTPServerDataConnection -ConnectionType DataConnection -Verbose
-    $CleanUpTCPDataSocket        = Close-TCPClientSocket -TCPClientSocket $TCPDataSocket -SocketType DataSocket -Verbose
+
+    Send-LocalFileByte -FTPServerConnection $FTPServerDataConnection -LocalFilePath $LocalFilePath -Verbose
+    Close-TCPNetworkStream -FTPServerConnection $FTPServerDataConnection -ConnectionType DataConnection -Verbose
+    Close-TCPClientSocket -TCPClientSocket $TCPDataSocket -SocketType DataSocket -Verbose
     Write-Verbose "END Data Connection Verbose Stream---------------"
     
     Write-Verbose "BEGIN Control Connection Clean Up Verbose Stream---------------"
-    $CleanUpCommandWritingDelegate  = Close-FTPCommandDelegate -CommandWritingDelegate $ControlConnectionCommandWriter -Verbose
-    $CleanUpServerControlConnection = Close-TCPNetworkStream -FTPServerConnection $FTPServerControlConnection -ConnectionType ControlConnection -Verbose
-    $CleanUpTCPControlSocket        = Close-TCPClientSocket -TCPClientSocket $TCPControlSocket -SocketType ControlSocket -Verbose
+    Close-FTPCommandDelegate -CommandWritingDelegate $ControlConnectionCommandWriter -Verbose
+    Close-TCPNetworkStream -FTPServerConnection $FTPServerControlConnection -ConnectionType ControlConnection -Verbose
+    Close-TCPClientSocket -TCPClientSocket $TCPControlSocket -SocketType ControlSocket -Verbose
     Write-Verbose "End Control Connection Clean Up Verbose Stream---------------"
     Write-Output $FTPServerTranscript
 }

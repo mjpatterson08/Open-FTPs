@@ -41,7 +41,7 @@ Function Close-TCPClientSocket
 
     Write-Verbose "Handling $SocketType TCP Socket Clean Up"
     Write-Verbose "Closing, $SocketType"
-    $TCPClientSocket.Dispose()
-    $TCPClientSocket.Close()
+    [void]$TCPClientSocket.Dispose()
+    [void]$TCPClientSocket.Close()
     Write-Verbose "$SocketType Closed"
 }

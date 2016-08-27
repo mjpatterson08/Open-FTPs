@@ -23,6 +23,7 @@ Function Test-ConnectionEncryption
     Author: Michael J. Patterson
 #>
     [CmdLetBinding()]
+    [OutputType('System.Boolean')]
     Param([Parameter(Mandatory=$True, Position=0)]
           [ValidateNotNullorEmpty()]
           $FTPServerConnection)

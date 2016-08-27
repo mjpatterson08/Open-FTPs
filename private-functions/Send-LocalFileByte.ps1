@@ -1,4 +1,4 @@
-Function Send-LocalFileBytes
+Function Send-LocalFileByte
 {
 <#
 .SYNOPSIS
@@ -17,7 +17,7 @@ Function Send-LocalFileBytes
     a String Type as input and should be the full path to the local file that is to be
     uploaded to the FTP Server.
 .EXAMPLE
-    Send-LocalFileBytes -FTPServerConnection $FTPServerConnection -LocalFilePath "C:\Example.txt"
+    Send-LocalFileByte -FTPServerConnection $FTPServerConnection -LocalFilePath "C:\Example.txt"
 
     This command will send the bytes of the local file to the FTP Server through the FTP Server
     Connection.

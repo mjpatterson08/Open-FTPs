@@ -1,4 +1,4 @@
-Function Send-FTPAuthCommands
+Function Send-FTPAuthCommand
 {
 <#
 .SYNOPSIS
@@ -22,7 +22,7 @@ Function Send-FTPAuthCommands
     This parameter is required and is the 4th positional parameter. It will accept
     a string as input, that string is to be the Password of the FTP Account.
 .EXAMPLE
-    Send-FTPAuthCommands -CommandWriter $CommandWriter -FTPServerConnection $FTPServerConnection -UserName ExampleUsername -Password ExamplePassword
+    Send-FTPAuthCommand -CommandWriter $CommandWriter -FTPServerConnection $FTPServerConnection -UserName ExampleUsername -Password ExamplePassword
 
     This command will authenticate with the FTP Server by sending the UserName and Password commands
     to the FTP server.

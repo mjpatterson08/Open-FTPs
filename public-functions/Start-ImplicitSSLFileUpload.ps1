@@ -95,8 +95,8 @@ Function Start-ImplicitSSLFileUpload
         $FTPServerControlConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPControlSocket -TransmissionContext StandardSSL -Verbose
     }
     $ControlConnectionCommandWriter = New-FTPCommandDelegate -FTPServerConnection $FTPServerControlConnection
-    $SendAuthenicationCommands      = Send-FTPAuthCommands -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -UserName $UserName -Password $Password
-    $SendSetupTransferModes         = Send-FTPTransferSetUpCommands -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection
+    $SendAuthenicationCommands      = Send-FTPAuthCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -UserName $UserName -Password $Password
+    $SendSetupTransferModes         = Send-FTPTransferSetUpCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection
     $PassiveHandshakePortResponse   = Send-FTPPassiveCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection
     $SendSTORFileCommand            = Send-FTPFileTransferCommand -CommandWriter $ControlConnectionCommandWriter -FTPServerConnection $FTPServerControlConnection -LocalFilePath $LocalFilePath -RemoteFilePathRoot $RemoteDirectory
     Write-Verbose "END Control Connection Verbose Stream---------------"
@@ -111,7 +111,7 @@ Function Start-ImplicitSSLFileUpload
     {
         $FTPServerDataConnection = Connect-FTPServer -ServerIPAddress $ServerIPAddress -TCPClientSocket $TCPDataSocket -TransmissionContext StandardSSL -Verbose
     }
-    $SendLocalFileBytes          = Send-LocalFileBytes -FTPServerConnection $FTPServerDataConnection -LocalFilePath $LocalFilePath -Verbose
+    $SendLocalFileBytes          = Send-LocalFileByte -FTPServerConnection $FTPServerDataConnection -LocalFilePath $LocalFilePath -Verbose
     $CleanUpServerDataConnection = Close-TCPNetworkStream -FTPServerConnection $FTPServerDataConnection -ConnectionType DataConnection -Verbose
     $CleanUpTCPDataSocket        = Close-TCPClientSocket -TCPClientSocket $TCPDataSocket -SocketType DataSocket -Verbose
     Write-Verbose "END Data Connection Verbose Stream---------------"

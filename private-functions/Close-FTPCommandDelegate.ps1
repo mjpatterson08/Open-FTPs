@@ -25,6 +25,6 @@ Function Close-FTPCommandDelegate
 
     Write-Verbose "Handling CommandWritingDelegate .Net Stream Writer Clean Up"
     Write-Verbose "Closing .Net Stream Writer"
-    $CommandWritingDelegate.Close()
+    [void]$CommandWritingDelegate.Close()
     Write-Verbose ".Net Stream Writer Closed"
 }

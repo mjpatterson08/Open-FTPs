@@ -40,7 +40,7 @@ Function Close-TCPNetworkStream
 
     Write-Verbose "Handling $ConnectionType Network Stream Clean Up"
     Write-Verbose "Closing, $ConnectionType"
-    $FTPServerConnection.Dispose()
-    $FTPServerConnection.Close()
+    [void]$FTPServerConnection.Dispose()
+    [void]$FTPServerConnection.Close()
     Write-Verbose "$ConnectionType Closed"
 }

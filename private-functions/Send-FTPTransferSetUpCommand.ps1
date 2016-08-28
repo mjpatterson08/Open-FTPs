@@ -1,4 +1,4 @@
-Function Send-FTPTransferSetUpCommands
+Function Send-FTPTransferSetUpCommand
 {
 <#
 .SYNOPSIS
@@ -34,7 +34,7 @@ Function Send-FTPTransferSetUpCommands
     a string as input; however, the appropriate FTP Command is already the default value of this
     parameter.
 .EXAMPLE
-    Send-FTPTransferSetUpCommands -CommandWriter $CommandWriter -FTPServerConnection $FTPServerConnection
+    Send-FTPTransferSetUpCommand -CommandWriter $CommandWriter -FTPServerConnection $FTPServerConnection
 
     This command will send the Passive FTP Command to the FTP Server, parse the Server's Response
     for the new Port Number that will be used to set up the Data Connection and returns the required

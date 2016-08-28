@@ -12,7 +12,7 @@
 RootModule = 'Open-FTPS.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.0.3'
 
 # ID used to uniquely identify this module
 GUID = 'f18b11a4-a4b4-41b8-baec-b445984d1050'
@@ -22,7 +22,7 @@ Author = 'Michael J. Patterson'
 <#
 Other Contributers
 Kevn Marquette
->#
+#>
 
 # Company or vendor of this module
 CompanyName = 'Unknown'
@@ -73,13 +73,13 @@ Copyright = '(c) 2016 Michael J. Patterson. All rights reserved.'
 FunctionsToExport = 'Start-ImplicitSSLFileUpload'
 
 # Cmdlets to export from this module
-CmdletsToExport = '*'
+CmdletsToExport = ''
 
 # Variables to export from this module
 VariablesToExport = 'FTPServerTranscript'
 
 # Aliases to export from this module
-AliasesToExport = '*'
+AliasesToExport = ''
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
